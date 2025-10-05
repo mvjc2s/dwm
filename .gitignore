@@ -3,7 +3,6 @@ config.h
 config.mk.orig
 drw.o
 dwm
-dwm.1.rej
 dwm.c.orig
 dwm.o
 dwm.png
