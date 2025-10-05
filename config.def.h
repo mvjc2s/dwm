@@ -122,7 +122,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_d,			   incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,			   setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,			   setmfact,       {.f = +0.05} },
-    { MODKEY|Shift,                 XK_Return,		   zoom,           {0} },
+    { MODKEY|ShiftMask,             XK_Return,		   zoom,           {0} },
 
 	/* layouts keybinds */
 	{ MODKEY,                       XK_t,			   setlayout,      {.v = &layouts[0] } },		/* layout[0]: tile */                                   
@@ -137,8 +137,10 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_g,			   setlayout,      {.v = &layouts[9] } },		/* layout[9]: n + 1 row grid */
 	{ MODKEY|ControlMask|ShiftMask, XK_g,			   setlayout,      {.v = &layouts[10] } },		/* layout[10]: gapless grid */
 	{ MODKEY|ShiftMask,             XK_h,      		   setlayout,      {.v = &layouts[11] } },		/* layout[11]: horizontal grid */ 
-	{ MODKEY,                       XK_c			   setlayout,	   {.v = $layouts[12] } },		/* layout[12]: centered master */
+	{ MODKEY,                       XK_c,			   setlayout,	   {.v = &layouts[12] } },		/* layout[12]: centered master */
 	{ MODKEY|ShiftMask,             XK_c,      		   setlayout,      {.v = &layouts[13] } },		/* layout[13]: centered floating master */
+	{ MODKEY|ControlMask,			XK_comma,  		   cyclelayout,    {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_period, 		   cyclelayout,    {.i = +1 } },
 	{ MODKEY,                       XK_space,		   setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,		   togglefloating, {0} },
 
