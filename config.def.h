@@ -32,11 +32,12 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     			instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "Gimp",    			NULL,     NULL,           0,         1,          0,           0,        -1 },
-	{ "Firefox", 			NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
-	{ "st-256color",      	NULL,     NULL,           0,         0,          1,           0,        -1 },
-	{ NULL,      			NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
+	/* class     			instance  title           tags mask  isfloating		x, 		y, 		w, 		h	 			isterminal  noswallow  monitor */
+	{ "Gimp",    			NULL,     NULL,           0,         1,			    -1,		-1,		-1,		-1,         	0,          0,        -1 },
+	{"Qalculate-gtk",		NULL,	  NULL,			  0,		 1,				.35,	35,		.3,		.5,				0,			0,		  -1 },
+	{ "Firefox", 			NULL,     NULL,           1 << 8,    0,				-1,		-1,		-1,		-1, 			0,         -1,        -1 },
+	{ "st-256color",      	NULL,     NULL,           0,         0,				-1,		-1,		-1,		-1,				1,          0,        -1 },
+	{ NULL,      			NULL,     "Event Tester", 0,         0,				-1,		-1,		-1,		-1,				0,          1,        -1 }, /* xev */
 };
 
 /* layout(s) */
@@ -87,6 +88,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
+static const scratchpad qalculate = {.class = "Qalculate-gtk", .v = (char *[]){"qalculate-gtk", NULL}};
 
 static const Arg tagexec[] = {
 	{ .v = termcmd },
@@ -142,6 +144,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Left,		   tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_Right,		   tagmon,         {.i = +1 } },
     { MODKEY,             			XK_backslash,      swapmon,   	   {0} },
+	{ControlMask,					XK_s,			   togglescratch,  {.v = &qalculate } },
 	TAGKEYS(                        XK_1,							   0)
 	TAGKEYS(                        XK_2,							   1)
 	TAGKEYS(                        XK_3,							   2)
