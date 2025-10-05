@@ -53,20 +53,20 @@ static const int refreshrate = 120;  /* refresh rate (per second) for client mov
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "[M]",      monocle },
-	{ "[@]",      spiral },
-	{ "[\\]",     dwindle },
-	{ "H[]",      deck },
-	{ "TTT",      bstack },
-	{ "===",      bstackhoriz },
-	{ "HHH",      grid },
-	{ "###",      nrowgrid },
-	{ "---",      horizgrid },
-	{ ":::",      gaplessgrid },
-	{ "|M|",      centeredmaster },
-	{ ">M>",      centeredfloatingmaster },
-	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ "[]=",      tile },							/* layout[0]: tile */
+	{ "><>",      NULL },							/* layout[1]: no layout function = floating behavior */
+	{ "[M]",      monocle },						/* layout[2]: monocle */
+	{ "TTT",      bstack },							/* layout[3]: bottom stack */
+	{ "===",      bstackhoriz },					/* layout[4]: bottom stack horizontal */
+	{ "[@]",      spiral },							/* layout[5]: spiral */
+	{ "[\\]",     dwindle },						/* layout[6]: dwindle */
+	{ "H[]",      deck },							/* layout[7]: deck */
+	{ "HHH",      grid },							/* layout[8]: grid */
+	{ "###",      nrowgrid },						/* layout[9]: n + 1 row grid */
+	{ ":::",      gaplessgrid },					/* layout[10]: gapless grid */	
+	{ "---",      horizgrid },						/* layout[11]: horizontal grid */
+	{ "|M|",      centeredmaster },					/* layout[12]: centered master */
+	{ ">M>",      centeredfloatingmaster },			/* layout[13]: centered floating master */
 	{ NULL,       NULL },
 };
 
@@ -104,17 +104,53 @@ static const Arg tagexec[] = {
 
 static const Key keys[] = {
 	/* modifier                     key				   function        argument */
+
+    /* spawn keybindings */
 	{ MODKEY,                       XK_p,			   spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return,		   spawn,          {.v = termcmd } },
+	{ MODKEY,             			XK_Return,		   spawn,          {.v = termcmd } },
+
+    /* dwm control keybindings */
+    { MODKEY,             			XK_q,			   killclient,     {0} },
+	{ MODKEY|ShiftMask,             XK_q,      		   quit,		   {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_q,      		   quit,           {1} }, 
 	{ MODKEY,                       XK_b,			   togglebar,      {0} },
-	{ MODKEY,                       XK_j,			   focusstack,     {.i = +1 } },
+
+	/* stack control keybindings */
+    { MODKEY,                       XK_j,			   focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,			   focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,			   incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,			   incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,			   setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,			   setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_Return,		   zoom,           {0} },
-	{ MODKEY|Mod1Mask,              XK_u,			   incrgaps,       {.i = +1 } },
+    { MODKEY|Shift,                 XK_Return,		   zoom,           {0} },
+
+	/* layouts keybinds */
+	{ MODKEY,                       XK_t,			   setlayout,      {.v = &layouts[0] } },		/* layout[0]: tile */                                   
+	{ MODKEY,                       XK_f,			   setlayout,      {.v = &layouts[1] } },		/* layout[1]: no layout function = floating behavior */
+	{ MODKEY,                       XK_m,			   setlayout,      {.v = &layouts[2] } },		/* layout[2]: monocle */
+	{ MODKEY|ShiftMask,             XK_b,      		   setlayout,      {.v = &layouts[3] } },		/* layout[3]: bottom stack */
+	{ MODKEY|ControlMask|ShiftMask, XK_b,      		   setlayout,      {.v = &layouts[4] } },		/* layout[4]: bottom stack horizontal */
+	{ MODKEY,                       XK_r,      		   setlayout,      {.v = &layouts[5] } },		/* layout[5]: spiral */
+	{ MODKEY|ShiftMask,             XK_t,      		   setlayout,      {.v = &layouts[6] } },		/* layout[6]: dwindle */
+	{ MODKEY|ShiftMask,             XK_d,			   setlayout,      {.v = &layouts[7] } },		/* layout[7]: deck */
+	{ MODKEY,                       XK_g,			   setlayout,      {.v = &layouts[8] } },		/* layout[8]: grid */
+	{ MODKEY|ShiftMask,             XK_g,			   setlayout,      {.v = &layouts[9] } },		/* layout[9]: n + 1 row grid */
+	{ MODKEY|ControlMask|ShiftMask, XK_g,			   setlayout,      {.v = &layouts[10] } },		/* layout[10]: gapless grid */
+	{ MODKEY|ShiftMask,             XK_h,      		   setlayout,      {.v = &layouts[11] } },		/* layout[11]: horizontal grid */ 
+	{ MODKEY,                       XK_c			   setlayout,	   {.v = $layouts[12] } },		/* layout[12]: centered master */
+	{ MODKEY|ShiftMask,             XK_c,      		   setlayout,      {.v = &layouts[13] } },		/* layout[13]: centered floating master */
+	{ MODKEY,                       XK_space,		   setlayout,      {0} },
+	{ MODKEY|ShiftMask,             XK_space,		   togglefloating, {0} },
+
+	/* multi-monitor keybinds */
+	{ MODKEY,                       XK_Left,		   focusmon,       {.i = -1 } },
+	{ MODKEY,                       XK_Right,		   focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_Left,		   tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_Right,		   tagmon,         {.i = +1 } },
+    { MODKEY,             			XK_backslash,      swapmon,   	   {0} },
+
+	/* gaps control keybindings */
+    { MODKEY|Mod1Mask,              XK_u,			   incrgaps,       {.i = +1 } },
 	{ MODKEY|Mod1Mask|ShiftMask,    XK_u,			   incrgaps,       {.i = -1 } },
 	{ MODKEY|Mod1Mask,              XK_i,			   incrigaps,      {.i = +1 } },
 	{ MODKEY|Mod1Mask|ShiftMask,    XK_i,			   incrigaps,      {.i = -1 } },
@@ -130,21 +166,12 @@ static const Key keys[] = {
 	{ MODKEY|Mod1Mask|ShiftMask,    XK_9,			   incrovgaps,     {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_equal,		   togglegaps,     {0} },
 	{ MODKEY|ShiftMask,    			XK_minus,		   defaultgaps,    {0} },
-	{ MODKEY,                       XK_Tab,			   view,           {0} },
-	{ MODKEY,             			XK_q,			   killclient,     {0} },
-	{ MODKEY,                       XK_t,			   setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,			   setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,			   setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_space,		   setlayout,      {0} },
-	{ MODKEY|ShiftMask,             XK_space,		   togglefloating, {0} },
-	{ MODKEY,                       XK_0,			   view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,			   tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_Left,		   focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_Right,		   focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_Left,		   tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_Right,		   tagmon,         {.i = +1 } },
-    { MODKEY,             			XK_backslash,      swapmon,   	   {0} },
+
+
+	/* scratchpads */
 	{ControlMask,					XK_s,			   togglescratch,  {.v = &qalculate } },
+
+    /* tags keys */
 	TAGKEYS(                        XK_1,							   0)
 	TAGKEYS(                        XK_2,							   1)
 	TAGKEYS(                        XK_3,							   2)
@@ -154,8 +181,11 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_7,							   6)
 	TAGKEYS(                        XK_8,							   7)
 	TAGKEYS(                        XK_9,							   8)
-	{ MODKEY|ShiftMask,             XK_q,      		   quit,		   {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_q,      		   quit,           {1} }, 
+
+	/* tags control keybindings */
+	{ MODKEY,                       XK_0,			   view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,			   tag,            {.ui = ~0 } },
+	{ MODKEY,                       XK_Tab,			   view,           {0} },
 };
 
 /* button definitions */
