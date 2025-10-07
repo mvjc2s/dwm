@@ -95,6 +95,14 @@ static const Layout layouts[] = {
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
+#define STACKKEYS(MOD,ACTION) \
+	{ MOD, XK_j,     		ACTION##stack, {.i = INC(+1) } }, \
+	{ MOD, XK_k,     		ACTION##stack, {.i = INC(-1) } }, \
+	{ MOD, XK_apostrophe, 	ACTION##stack, {.i = PREVSEL } }, \
+	{ MOD, XK_q,     		ACTION##stack, {.i = 0 } }, \
+	{ MOD, XK_a,     		ACTION##stack, {.i = 1 } }, \
+	{ MOD, XK_z,     		ACTION##stack, {.i = 2 } }, \
+	{ MOD, XK_x,     		ACTION##stack, {.i = -1 } }, 
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
@@ -110,15 +118,16 @@ static const char *layoutmenu_cmd = "layoutmenu.sh";
 static const scratchpad qalculate = {.class = "Qalculate-gtk", .v = (char *[]){"qalculate-gtk", NULL}};
 
 static const Arg tagexec[] = {
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd }
+	{ .v = termcmd }, // 1
+	{ .v = termcmd }, // 2
+	{ .v = termcmd }, // 3
+	{ .v = termcmd }, // 4
+	{ .v = termcmd }, // 5
+	{ .v = termcmd }, // 6
+	{ .v = termcmd }, // 7
+	{ .v = termcmd }, // 8
+	{ .v = termcmd } // 9
+	/* GTKCMD("gtkapplication") */
 };
 
 static const Key keys[] = {
@@ -129,19 +138,19 @@ static const Key keys[] = {
 	{ MODKEY,             			XK_Return,		   spawn,          {.v = termcmd } },
 
     /* dwm control keybindings */
-    { MODKEY,             			XK_q,			   killclient,     {0} },
-	{ MODKEY|ShiftMask,             XK_q,      		   quit,		   {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_q,      		   quit,           {1} }, 
+    { MODKEY|ShiftMask,             XK_q,			   killclient,     {0} },
+	{ MODKEY|ShiftMask,             XK_BackSpace,      quit,		   {0} },
+	{ MODKEY|ControlMask|ShiftMask,	XK_BackSpace,      quit,           {1} }, 
 	{ MODKEY,                       XK_b,			   togglebar,      {0} },
 	{ MODKEY,                       XK_s,      		   togglesticky,   {0} },
 
 	/* stack control keybindings */
-    { MODKEY,                       XK_j,			   focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,			   focusstack,     {.i = -1 } },
+	STACKKEYS(MODKEY,                          		   focus)
+	STACKKEYS(MODKEY|ShiftMask,                		   push)
+	{ MODKEY|ControlMask|ShiftMask, XK_j,      		   rotatestack,    {.i = +1 } },
+	{ MODKEY|ControlMask|ShiftMask, XK_k,              rotatestack,    {.i = -1 } },
 	{ MODKEY,                       XK_i,			   incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,			   incnmaster,     {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_j,      		   rotatestack,    {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_k,              rotatestack,    {.i = -1 } },
 	{ MODKEY,                       XK_h,			   setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,			   setmfact,       {.f = +0.05} },
     { MODKEY|ShiftMask,             XK_Return,		   zoom,           {0} },
