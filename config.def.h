@@ -116,6 +116,7 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_q,      		   quit,		   {0} },
 	{ MODKEY|ControlMask|ShiftMask, XK_q,      		   quit,           {1} }, 
 	{ MODKEY,                       XK_b,			   togglebar,      {0} },
+	{ MODKEY,                       XK_s,      		   togglesticky,   {0} },
 
 	/* stack control keybindings */
     { MODKEY,                       XK_j,			   focusstack,     {.i = +1 } },
