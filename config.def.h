@@ -144,7 +144,7 @@ static const Key keys[] = {
 	{ MODKEY|Mod1Mask|ShiftMask,	XK_BackSpace,      quit,				   {1} }, /* restartsig */
 	{ MODKEY,                       XK_b,			   togglebar,			   {0} },
 	{ MODKEY,                       XK_s,      		   togglesticky,		   {0} },
-	{ MODKEY,						XK_f,	   		   togglefullscreen,	   {0} },
+	{ MODKEY|ShiftMask,				XK_f,	   		   togglefullscreen,	   {0} },
 
 	/* stack control keybindings */
 	STACKKEYS(MODKEY,                          		   focus)
