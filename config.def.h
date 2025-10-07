@@ -147,8 +147,6 @@ static const Key keys[] = {
 	/* stack control keybindings */
 	STACKKEYS(MODKEY,                          		   focus)
 	STACKKEYS(MODKEY|ShiftMask,                		   push)
-	{ MODKEY|ControlMask|ShiftMask, XK_j,      		   rotatestack,    {.i = +1 } },
-	{ MODKEY|ControlMask|ShiftMask, XK_k,              rotatestack,    {.i = -1 } },
 	{ MODKEY,                       XK_i,			   incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,			   incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,			   setmfact,       {.f = -0.05} },
