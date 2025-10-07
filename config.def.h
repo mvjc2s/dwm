@@ -11,8 +11,14 @@ static const unsigned int gappov    = 30;       /* vert outer gap between window
 static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
+static const char *fonts[]          = {
+		"Iosevka Nerd Font:size=12",
+		"Hack Nerd Font:size=12",
+		"FiraCode Nerd Font:size=12",
+		"Noto Sans:size=11",
+		"Noto Color Emoji:pixelsize=12:antialias=true:autohint=true"
+};
+static const char dmenufont[]       = "Iosevka Nerd Font:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -27,8 +33,17 @@ static const XPoint stickyicon[]    = { {0,0}, {4,0}, {4,8}, {2,6}, {0,8}, {0,0}
 static const XPoint stickyiconbb    = {4,8};	/* defines the bottom right corner of the polygon's bounding box (speeds up scaling) */
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-//static const char *tags[] = { "🎯", "🔍", "💻", "📊", "🌐", "📝", "🔧", "📡", "🛡️" };
+static const char *tags[] = {
+  "1:🔍", /* information gathering / identification */
+  "2:🎯", /* exploration */
+  "3:💻", /* post-exploration (C2, artifacts, evidences) */
+  "4:📝", /* report writing and review */
+  "5:👨‍💻", /* coding */
+  "6:📁", /* others / miscellaneous */
+  "7:🛠️", /* system administration */
+  "8:🛡️", /* defense stuffs */
+  "9:🌐"  /* web browsing */
+};
 
 static const Rule rules[] = {
 	/* xprop(1):
