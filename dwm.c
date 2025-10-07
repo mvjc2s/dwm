@@ -1200,7 +1200,7 @@ void
 killthis(Client *c) {
     if (!c)
         return;
-	if (!sendevent(c, wmatom[WMDelete])) {
+    if (!sendevent(c, wmatom[WMDelete])) {
 		XGrabServer(dpy);
 		XSetErrorHandler(xerrordummy);
 		XSetCloseDownMode(dpy, DestroyAll);
