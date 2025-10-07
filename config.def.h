@@ -88,6 +88,7 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
+static const char *layoutmenu_cmd = "layoutmenu.sh";
 static const scratchpad qalculate = {.class = "Qalculate-gtk", .v = (char *[]){"qalculate-gtk", NULL}};
 
 static const Arg tagexec[] = {
@@ -208,6 +209,7 @@ static const Key keys[] = {
    Button5 = Scroll down. */
 static const Button buttons[] = {
 	/* click                event mask      button          function        argument */
+	{ ClkLtSymbol,          0,              Button3,        layoutmenu,     {0} },
 	{ ClkLtSymbol,          0,              Button4,        cyclelayout,    {.i = +1 } },
 	{ ClkLtSymbol,          0,              Button5,        cyclelayout,    {.i = -1 } },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
