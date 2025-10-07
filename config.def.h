@@ -138,9 +138,10 @@ static const Key keys[] = {
 	{ MODKEY,             			XK_Return,		   spawn,          {.v = termcmd } },
 
     /* dwm control keybindings */
-    { MODKEY|ShiftMask,             XK_q,			   killclient,     {0} },
-	{ MODKEY|ShiftMask,             XK_BackSpace,      quit,		   {0} },
-	{ MODKEY|ControlMask|ShiftMask,	XK_BackSpace,      quit,           {1} }, 
+    { MODKEY,             			XK_BackSpace,	   killclient,     {0} }, /* kill a focus client */
+    { MODKEY|ShiftMask,            	XK_BackSpace,	   killclient,     {.ui = 1 } }, /* kill all windows besides current */
+	{ MODKEY|Mod1Mask,             	XK_BackSpace,      quit,		   {0} }, /* quit dwm */
+	{ MODKEY|Mod1Mask|ShiftMask,	XK_BackSpace,      quit,           {1} }, /* restartsig */ 
 	{ MODKEY,                       XK_b,			   togglebar,      {0} },
 	{ MODKEY,                       XK_s,      		   togglesticky,   {0} },
 
@@ -149,8 +150,8 @@ static const Key keys[] = {
 	STACKKEYS(MODKEY|ShiftMask,                		   push)
 	{ MODKEY,                       XK_i,			   incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,			   incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,			   setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,			   setmfact,       {.f = +0.05} },
+	{ MODKEY,                       XK_h,			   setmfact,       {.f = -0.05 } },
+	{ MODKEY,                       XK_l,			   setmfact,       {.f = +0.05 } },
     { MODKEY|ShiftMask,             XK_Return,		   zoom,           {0} },
 
 	/* layouts keybinds */
