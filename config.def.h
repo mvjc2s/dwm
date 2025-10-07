@@ -200,7 +200,6 @@ static const Key keys[] = {
    ClkWinTitle = (active window title in the bar), 
    ClkClientWin = client window itself, or
    ClkRootWin = window root. */
-/* X.org mouse buttons */
 /* button can be
    Button1 = left click,
    Button2 = middle click,
