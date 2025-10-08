@@ -2,7 +2,7 @@
 
 cat <<EOF | xmenu
 []= tile (Mod+t)	0
-><> floating (Mod+Sft+f)	1
+><> floating (Mod+f)	1
 [M] monocle (Mod+m)	2
 TTT bstack (Mod+Sft+b)	3
 === bstackhoriz (Mod+Ctl+Sft+b)	4

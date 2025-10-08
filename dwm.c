@@ -147,11 +147,6 @@ struct Monitor {
 	unsigned int sellt;
 	unsigned int tagset[2];
 	int showbar;
-	int showtitle;
-	int showtags;
-	int showlayout;
-	int showstatus;
-	int showfloating;
 	int topbar;
 	Client *clients;
 	Client *sel;
@@ -253,11 +248,6 @@ static void tag(const Arg *arg);
 static void spawntag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void togglebar(const Arg *arg);
-static void togglebartags(const Arg *arg);
-static void togglebartitle(const Arg *arg);
-static void togglebarlt(const Arg *arg);
-static void togglebarstatus(const Arg *arg);
-static void togglebarfloat(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void togglefullscreen();
 static void togglesticky(const Arg *arg);
@@ -587,17 +577,15 @@ buttonpress(XEvent *e)
 			if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
 				continue;
 			x += TEXTW(tags[i]);
-		    if (selmon->showtags)
-				x += TEXTW(tags[i]);
 		} while (ev->x >= x && ++i < LENGTH(tags));
-		if (i < LENGTH(tags) && selmon->showtags) {
+		if (i < LENGTH(tags)) {
 			click = ClkTagBar;
 			arg.ui = 1 << i;
-		} else if (ev->x < x + TEXTW(selmon->ltsymbol) && selmon->showlayout)
+		} else if (ev->x < x + TEXTW(selmon->ltsymbol))
 			click = ClkLtSymbol;
-		else if (ev->x > selmon->ww - (int)TEXTW(stext) && selmon->showstatus)
+		else if (ev->x > selmon->ww - (int)TEXTW(stext))
 			click = ClkStatusText;
-		else if (selmon->showtitle)
+		else
 			click = ClkWinTitle;
 	} else if ((c = wintoclient(ev->window))) {
 		focus(c);
@@ -806,11 +794,6 @@ createmon(void)
 	m->mfact = mfact;
 	m->nmaster = nmaster;
 	m->showbar = showbar;
-	m->showtitle = showtitle;
-	m->showtags = showtags;
-	m->showlayout = showlayout;
-	m->showstatus = showstatus;
-	m->showfloating = showfloating;
 	m->topbar = topbar;
 	m->gappih = gappih;
 	m->gappiv = gappiv;
@@ -921,7 +904,7 @@ drawbar(Monitor *m)
 		return;
 
 	/* draw status first so it can be overdrawn by tags later */
-	if (m == selmon && selmon->showstatus) { /* status is only drawn on selected monitor */
+	if (m == selmon) { /* status is only drawn on selected monitor */
 		drw_setscheme(drw, scheme[SchemeNorm]);
 		tw = TEXTW(stext) - lrpad + 2; /* 2px right padding */
 		drw_text(drw, m->ww - tw, 0, tw, bh, 0, stext, 0);
@@ -929,7 +912,7 @@ drawbar(Monitor *m)
 
 	for (c = m->clients; c; c = c->next) {
 		occ |= c->tags == TAGMASK ? 0 : c->tags;
-		if (c->isurgent && selmon->showtags)
+		if (c->isurgent)
 			urg |= c->tags;
 	}
 	x = 0;
@@ -937,30 +920,20 @@ drawbar(Monitor *m)
 		/* Do not draw vacant tags */
 		if(!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
 			continue;
-		if (selmon->showtags) {
-				w = TEXTW(tags[i]);
-				drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-				drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
-				if (occ & 1 << i && selmon->showfloating)
-				drw_rect(drw, x + boxs, boxs, boxw, boxw,
-						m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
-						urg & 1 << i);
-				x += w;
-		}
-    }
-	
-	/* draw layout indicator if selmon->showlayout */
-	if (selmon->showlayout) {
-		w = TEXTW(m->ltsymbol);
-		drw_setscheme(drw, scheme[SchemeNorm]);
-		x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+		w = TEXTW(tags[i]);
+		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
+		x += w;
 	}
+	w = TEXTW(m->ltsymbol);
+	drw_setscheme(drw, scheme[SchemeNorm]);
+	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 
 	if ((w = m->ww - tw - x) > bh) {
-		if (m->sel && selmon->showtitle) {
+		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
-			if (m->sel->isfloating && selmon->showfloating)
+			if (m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 			if (m->sel->issticky)
 				drw_polygon(drw, x + boxs, m->sel->isfloating ? boxs * 2 + boxw : boxs, stickyiconbb.x, stickyiconbb.y, boxw, boxw * stickyiconbb.y / stickyiconbb.x, stickyicon, LENGTH(stickyicon), Nonconvex, m->sel->tags & m->tagset[m->seltags]);
@@ -1550,7 +1523,7 @@ propertynotify(XEvent *e)
 		}
 		if (ev->atom == XA_WM_NAME || ev->atom == netatom[NetWMName]) {
 			updatetitle(c);
-			if (c == c->mon->sel && selmon->showtitle)
+			if (c == c->mon->sel)
 				drawbar(c->mon);
 		}
 		if (ev->atom == netatom[NetWMWindowType])
@@ -2104,41 +2077,6 @@ togglebar(const Arg *arg)
 }
 
 void
-togglebartags(const Arg *arg)
-{
-    selmon->showtags = !selmon->showtags;
-	arrange(selmon);
-}
-
-void
-togglebartitle(const Arg *arg)
-{
-    selmon->showtitle = !selmon->showtitle;
-	arrange(selmon);
-}
-
-void
-togglebarlt(const Arg *arg)
-{
-    selmon->showlayout = !selmon->showlayout;
-	arrange(selmon);
-}
-
-void
-togglebarstatus(const Arg *arg)
-{
-    selmon->showstatus = !selmon->showstatus;
-	arrange(selmon);
-}
-
-void
-togglebarfloat(const Arg *arg)
-{
-    selmon->showfloating = !selmon->showfloating;
-	arrange(selmon);
-}
-
-void
 togglefloating(const Arg *arg)
 {
 	if (!selmon->sel)
@@ -2527,7 +2465,7 @@ updatesizehints(Client *c)
 void
 updatestatus(void)
 {
-	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)) && selmon->showstatus)
+	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
 		strcpy(stext, "dwm-"VERSION);
 	drawbar(selmon);
 }
