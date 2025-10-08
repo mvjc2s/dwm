@@ -209,6 +209,7 @@ static void grabbuttons(Client *c, int focused);
 static void grabkeys(void);
 static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
+static void killthis(Client *c);
 static void killclient(const Arg *arg);
 static void layoutmenu(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
