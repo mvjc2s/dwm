@@ -46,3 +46,35 @@ Configuration
 -------------
 The configuration of dwm is done by creating a custom config.h
 and (re)compiling the source code.
+
+Initial Planning of patches
+---------------------------
+
+* autostart;
+* attachbelow;
+* bulkill;
+* cyclelayouts;
+* fixmultimon;
+* focusfullscreen;
+* focusmonmouse;
+* focusonnetactive;
+* focusmaster-return;
+* hide_vacant_tags;
+* keychord;
+* layoutmenu;
+* pertag;
+* preventfocusshift;
+* restartsig;
+* spawntag;
+* status2D;
+* status2D-xrdb;
+* stacker;
+* statuscmd;
+* statuspadding;
+* swallow;
+* swapmonitors;
+* sticky;
+* stickyindicator;
+* vanitygaps;
+* warp;
+* xrdb.

@@ -1,0 +1,9 @@
+drw.o
+dwm
+dwm.c.orig
+dwm.o
+dwm.png
+config.def.h.orig
+config.h.orig
+config.mk.orig
+util.o
