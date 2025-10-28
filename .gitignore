@@ -4,6 +4,7 @@ dwm.c.orig
 dwm.o
 dwm.png
 config.def.h.orig
+config.h
 config.h.orig
 config.mk.orig
 util.o
