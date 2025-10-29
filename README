@@ -54,6 +54,7 @@ Initial Planning of patches
 * attachbelow;
 * bulkill;
 * cyclelayouts;
+* colorbar;
 * fixmultimon;
 * focusfullscreen;
 * focusmonmouse;
