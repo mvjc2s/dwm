@@ -241,6 +241,7 @@ static void spawntag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
+static void togglefullscreen();
 static void togglesticky(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
@@ -2069,6 +2070,14 @@ togglesticky(const Arg *arg)
 		return;
 	setsticky(selmon->sel, !selmon->sel->issticky);
 	arrange(selmon);
+}
+
+void
+togglefullscreen()
+{
+	if (selmon->sel){
+		setfullscreen(selmon->sel, !selmon->sel->isfullscreen);
+	}
 }
 
 void
