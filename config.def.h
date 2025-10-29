@@ -23,6 +23,8 @@ static const char *colors[][3]      = {
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
 };
+static const XPoint stickyicon[]    = { {0,0}, {4,0}, {4,8}, {2,6}, {0,8}, {0,0} }; /* represents the icon as an array of vertices */
+static const XPoint stickyiconbb    = {4,8};	/* defines the bottom right corner of the polygon's bounding box (speeds up scaling) */
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -164,6 +166,7 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                          7)
 	TAGKEYS(                        XK_9,                          8)
 	{ MODKEY|ShiftMask,             XK_BackSpace,    quit,        {0} },
+	{ MODKEY,                       XK_s,      togglesticky,   {0} },
 };
 
 /* button definitions */
