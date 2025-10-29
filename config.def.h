@@ -114,7 +114,7 @@ static const Arg tagexec[] = {
 static const Key keys[] = {
 	/* modifier                     key        function             argument */
 	{ MODKEY,                       XK_p,      spawn,              {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,              {.v = termcmd } },
+	{ MODKEY,                       XK_Return, spawn,              {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,          {0} },
   { MODKEY,                       XK_Tab,    toggleAttachBelow,  {0} },
 	STACKKEYS(MODKEY,                          focus)
@@ -123,7 +123,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_d,      incnmaster,         {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,           {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,           {.f = +0.05} },
-	{ MODKEY,                       XK_Return, zoom,               {0} },
+	{ MODKEY|ShiftMask,             XK_Return, focusmaster,               {0} },
 	{ MODKEY|Mod4Mask,              XK_u,      incrgaps,           {.i = +1 } },
 	{ MODKEY|Mod4Mask|ShiftMask,    XK_u,      incrgaps,           {.i = -1 } },
 	{ MODKEY|Mod4Mask,              XK_i,      incrigaps,          {.i = +1 } },
