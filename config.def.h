@@ -147,8 +147,8 @@ static const Keychord *keychords[] = {
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_BackSpace}},                           killclient,         {0} }),
   &((Keychord){2, {{MODKEY, XK_c}, {ShiftMask, XK_BackSpace}},                   killclient,         {.ui = 1 } }), /* kill all unselected windows */
   &((Keychord){2, {{MODKEY, XK_c}, {ControlMask|ShiftMask, XK_BackSpace}},       killclient,         {.ui = 2 } }), /* kill all windows */
-  &((Keychord){2, {{MODKEY, XK_c}, {0, XK_q}},                                   quit,               {0} }),
-  &((Keychord){2, {{MODKEY, XK_c}, {ShiftMask, XK_q}},                           quit,               {1} }),
+  &((Keychord){2, {{MODKEY, XK_c}, {0, XK_q}},                                   quit,               {0} }),        /* quit dwm */
+  &((Keychord){2, {{MODKEY, XK_c}, {ShiftMask, XK_q}},                           quit,               {1} }),        /* restart dwm */
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_b}},                                   togglebar,          {0} }),
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_s}},                                   togglesticky,       {0} }),
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_a}},                                   toggleAttachBelow,  {0} }),
