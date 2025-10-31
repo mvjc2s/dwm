@@ -35,22 +35,24 @@ static       int smartgaps          = 0;        /* 1 means no outer gap when the
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = {
+    "JetBrains Mono:size=12:antialias=true:autohint=true",
 		"Iosevka Nerd Font:size=12",
 		"Hack Nerd Font:size=12",
 		"FiraCode Nerd Font:size=12",
-		"Noto Sans:size=11",
+		"Noto Sans:size=12",
 		"Noto Color Emoji:pixelsize=12:antialias=true:autohint=true"
 };
-static const char dmenufont[]       = "Iosevka Nerd Font:size=12";
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
-static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+static const char dmenufont[]       = "JetBrains Mono:size=12:antialias=true:autohint=true";
+static char normbgcolor[]           = "#222222";
+static char normbordercolor[]       = "#444444";
+static char normfgcolor[]           = "#bbbbbb";
+static char selfgcolor[]            = "#eeeeee";
+static char selbordercolor[]        = "#005577";
+static char selbgcolor[]            = "#005577";
+static char *colors[][3] = {
+       /*               fg           bg           border   */
+       [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
+       [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
 };
 static const XPoint stickyicon[]    = { {0,0}, {4,0}, {4,8}, {2,6}, {0,8}, {0,0} }; /* represents the icon as an array of vertices */
 static const XPoint stickyiconbb    = {4,8};	/* defines the bottom right corner of the polygon's bounding box (speeds up scaling) */
@@ -116,10 +118,11 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
 static const char *tabtermcmd[]  = { "tabbed", "-r", "2", TERMINAL, "-w", "''", NULL };
 static const char *flameshotcmd[] = { "flameshot", "gui", NULL };
+static const char *themecmd[] = { "switch-theme", NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
 
 static const Arg tagexec[] = {
@@ -137,11 +140,12 @@ static const Arg tagexec[] = {
 static const Keychord *keychords[] = {
 	/* modifier     key                                                            function            argument */
 
-  /* spawn keybindings */
-  &((Keychord){1, {{MODKEY|ShiftMask, XK_Return}},                               spawn,              {.v = dmenucmd } }),
+  /* quick spawn keybindings */
   &((Keychord){1, {{MODKEY, XK_Return}},                                         spawn,              {.v = termcmd } }),
+  &((Keychord){1, {{MODKEY|ShiftMask, XK_Return}},                               spawn,              {.v = dmenucmd } }),
   &((Keychord){1, {{Mod1Mask, XK_Return}},                                       spawn,              {.v = tabtermcmd } }),
   &((Keychord){1, {{0, XK_Print}},                                               spawn,              {.v = flameshotcmd } }),
+  &((Keychord){1, {{MODKEY, XK_t}},                                              spawn,              {.v = themecmd } }),
 
   /* dwm control keybindings */
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_BackSpace}},                           killclient,         {0} }),
@@ -153,13 +157,14 @@ static const Keychord *keychords[] = {
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_s}},                                   togglesticky,       {0} }),
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_a}},                                   toggleAttachBelow,  {0} }),
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_f}},                                   togglefullscreen,   {0} }),
+  &((Keychord){2, {{MODKEY, XK_c}, {0, XK_F5}},                                  xrdb,               {.v = NULL } }),
 
   /* multi-monitor control keybindings */
-  &((Keychord){1, {{MODKEY, XK_m}, {0, XK_f}},                                   focusmon,           {.i = +1 } }),
-  &((Keychord){1, {{MODKEY, XK_m}, {ShiftMask, XK_f}},                           focusmon,           {.i = -1 } }),
-  &((Keychord){1, {{MODKEY, XK_m}, {0, XK_t}},                                   tagmon,             {.i = +1 } }),
-  &((Keychord){1, {{MODKEY, XK_m}, {ShiftMask, XK_t}},                           tagmon,             {.i = -1 } }),
-  &((Keychord){1, {{MODKEY, XK_m}, {XK_s}},                                      swapmon,            {0} }),
+  &((Keychord){2, {{MODKEY, XK_m}, {0, XK_f}},                                   focusmon,           {.i = +1 } }),
+  &((Keychord){2, {{MODKEY, XK_m}, {ShiftMask, XK_f}},                           focusmon,           {.i = -1 } }),
+  &((Keychord){2, {{MODKEY, XK_m}, {0, XK_t}},                                   tagmon,             {.i = +1 } }),
+  &((Keychord){2, {{MODKEY, XK_m}, {ShiftMask, XK_t}},                           tagmon,             {.i = -1 } }),
+  &((Keychord){2, {{MODKEY, XK_m}, {XK_s}},                                      swapmon,            {0} }),
 
   /* stack and gaps control keybindings */
   STACKKEYS(MODKEY,                                                              focus)
@@ -205,6 +210,8 @@ static const Keychord *keychords[] = {
   &((Keychord){2, {{MODKEY, XK_l}, {0, XK_period}},                              cyclelayout,        {.i = +1 } }),
   &((Keychord){2, {{MODKEY, XK_l}, {0, XK_comma}},                               cyclelayout,        {.i = -1 } }),
   &((Keychord){2, {{MODKEY, XK_l}, {0, XK_space}},                               togglefloating,     {0} }),
+  &((Keychord){2, {{MODKEY, XK_l}, {ShiftMask, XK_m}},                           layoutmenu,         {0} }),
+
 
   /* X11 Keybindings */
   &((Keychord){1, {{0, XF86XK_AudioMute}},                                       spawn,              SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -44 $(pidof dwmblocks)") }),
