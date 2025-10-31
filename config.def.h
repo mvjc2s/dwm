@@ -35,14 +35,14 @@ static       int smartgaps          = 0;        /* 1 means no outer gap when the
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = {
+		"FiraCode Nerd Font:size=12",
     "JetBrains Mono:size=12:antialias=true:autohint=true",
 		"Iosevka Nerd Font:size=12",
 		"Hack Nerd Font:size=12",
-		"FiraCode Nerd Font:size=12",
 		"Noto Sans:size=12",
 		"Noto Color Emoji:pixelsize=12:antialias=true:autohint=true"
 };
-static const char dmenufont[]       = "JetBrains Mono:size=12:antialias=true:autohint=true";
+static const char dmenufont[]       = "FiraCode Nerd Font:size=12:antialias=true:autohint=true";
 static char normbgcolor[]           = "#222222";
 static char normbordercolor[]       = "#444444";
 static char normfgcolor[]           = "#bbbbbb";
@@ -72,6 +72,11 @@ static const char *tags[] = {
   "8:🛡️", /* defense stuffs */
   "9:🌐"  /* web browsing */
 };
+
+static const unsigned int ulinepad      = 5;  /* horizontal padding between the underline and tag */
+static const unsigned int ulinestroke   = 2;  /* thickness / height of the underline */
+static const unsigned int ulinevoffset  = 0;  /* how far above the bottom of the bar the line should appear */
+static const int ulineall               = 0;  /* 1 to show underline on all tags, 0 for just the active ones */
 
 static const Rule rules[] = {
 	/* xprop(1):
