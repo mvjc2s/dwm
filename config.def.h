@@ -309,7 +309,7 @@ static const Keychord *keychords[] = {
   &((Keychord){1, {{0, XF86XK_AudioMedia}},                                      spawn,              {.v = sndmediacmd } }),          // open media client
   &((Keychord){1, {{0, XF86XK_AudioMicMute}},                                    spawn,              {.v = micmutecmd } }),           // mute microphone command
   &((Keychord){1, {{0, XF86XK_MonBrightnessUp}},                                 spawn,              {.v = brightnessupcmd } }),      // brightness up command
-  &((Keychord){1, {{0, XF86XK_MonBrightnessDown}},                               spawn,              {.v = brightnessdowncmd } } }),  // brightness down command
+  &((Keychord){1, {{0, XF86XK_MonBrightnessDown}},                               spawn,              {.v = brightnessdowncmd } }),  // brightness down command
 
   // Tags control keybindings
   &((Keychord){1, {{MODKEY, XK_Tab}},                                            view,               {0} }),                          // view across current and previous tag
