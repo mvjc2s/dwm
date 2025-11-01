@@ -108,6 +108,8 @@ static const XPoint stickyiconbb    = {4,8};	/* defines the bottom right corner 
 
 // Vanity gaps definitions
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
+#define ICONSIZE 16   /* icon size */
+#define ICONSPACING 5 /* space between icon and title */
 #include "vanitygaps.c"
 
 // Tagging
