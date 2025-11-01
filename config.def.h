@@ -1,13 +1,14 @@
 /* See LICENSE file for copyright and license details. */
 
+// XF86 Key symbols definition for X11 keybindings
 #include<X11/XF86keysym.h>
 
-/* Constants */
+// Program constants
 #define TERMINAL "st"
 #define TERMCLASS "st-256color"
 #define BROWSER "qutebrowser"
 
-/* key definitions */
+// MODKEY, TAGKEYS and STACKKEYS definitions
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
   &((Keychord){1, {{MODKEY, KEY}},                          view,           {.ui = 1 << TAG} }), \
@@ -23,28 +24,38 @@
   &((Keychord){1, {{MOD, XK_z}},     ACTION##stack, {.i = 2 } }), \
   &((Keychord){1, {{MOD, XK_x}},     ACTION##stack, {.i = -1 } }),
 
-/* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int snap      = 32;       /* snap pixel */
-static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
-static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
-static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
-static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov    = 30;       /* vert outer gap between windows and screen edge */
-static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
-static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
-static const int vertpad            = 10;       /* vertical padding of bar */
-static const int sidepad            = 10;       /* horizontal padding of bar */
-static const int horizpadbar        = 2;        /* horizontal padding for statusbar */
-static const int vertpadbar         = 0;        /* vertical padding for statusbar */
-static const char *fonts[]          = {
-		"FiraCode Nerd Font:size=12",
+// Appearance variables
+static const unsigned int borderpx      = 1;        /* border pixel of windows */
+static const unsigned int snap          = 32;       /* snap pixel */
+static const unsigned int gappih        = 20;       /* horiz inner gap between windows */
+static const unsigned int gappiv        = 10;       /* vert inner gap between windows */
+static const unsigned int gappoh        = 10;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov        = 30;       /* vert outer gap between windows and screen edge */
+static const unsigned int ulinepad      = 5;        /* horizontal padding between the underline and tag */
+static const unsigned int ulinestroke   = 2;        /* thickness / height of the underline */
+static const unsigned int ulinevoffset  = 0;        /* how far above the bottom of the bar the line should appear */
+static const int ulineall               = 0;        /* 1 to show underline on all tags, 0 for just the active ones */
+static const int swallowfloating        = 0;        /* 1 means swallow floating windows by default */
+static const int nmaster                = 1;        /* number of clients in master area */
+static const int resizehints            = 1;        /* 1 means respect size hints in tiled resizals */
+static const int showbar                = 1;        /* 0 means no bar */
+static const int topbar                 = 1;        /* 0 means bottom bar */
+static const int vertpad                = 10;       /* vertical padding of bar */
+static const int sidepad                = 10;       /* horizontal padding of bar */
+static const int horizpadbar            = 2;        /* horizontal padding for statusbar */
+static const int vertpadbar             = 0;        /* vertical padding for statusbar */
+static const int lockfullscreen         = 0;        /* 1 will force focus on the fullscreen window */
+static const int refreshrate            = 120;      /* refresh rate (per second) for client move/resize */
+static       int attachbelow            = 1;        /* 1 means attach after the currently active window */
+static       int smartgaps              = 0;        /* 1 means no outer gap when there is only one window */
+static const float mfact                = 0.55;     /* factor of master area size [0.05..0.95] */
+static const char *fonts[]              = {
+	  "FiraCode Nerd Font:size=12",
     "JetBrains Mono:size=12:antialias=true:autohint=true",
-		"Iosevka Nerd Font:size=12",
-		"Hack Nerd Font:size=12",
-		"Noto Sans:size=12",
-		"Noto Color Emoji:pixelsize=12:antialias=true:autohint=true"
+	  "Iosevka Nerd Font:size=12",
+	  "Hack Nerd Font:size=12",
+	  "Noto Sans:size=12",
+	  "Noto Color Emoji:pixelsize=12:antialias=true:autohint=true",
 };
 static const char dmenufont[]       = "FiraCode Nerd Font:size=12:antialias=true:autohint=true";
 static char normbgcolor[]           = "#222222";
@@ -95,10 +106,11 @@ static char *colors[][3] = {
 static const XPoint stickyicon[]    = { {0,0}, {4,0}, {4,8}, {2,6}, {0,8}, {0,0} }; /* represents the icon as an array of vertices */
 static const XPoint stickyiconbb    = {4,8};	/* defines the bottom right corner of the polygon's bounding box (speeds up scaling) */
 
+// Vanity gaps definitions
 #define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
 #include "vanitygaps.c"
 
-/* tagging */
+// Tagging
 static const char *tags[] = {
   "1:🔍", /* information gathering / identification */
   "2:🎯", /* exploration */
@@ -111,11 +123,7 @@ static const char *tags[] = {
   "9:🌐"  /* web browsing */
 };
 
-static const unsigned int ulinepad      = 5;  /* horizontal padding between the underline and tag */
-static const unsigned int ulinestroke   = 2;  /* thickness / height of the underline */
-static const unsigned int ulinevoffset  = 0;  /* how far above the bottom of the bar the line should appear */
-static const int ulineall               = 0;  /* 1 to show underline on all tags, 0 for just the active ones */
-
+// Window Manager Rules
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
@@ -128,14 +136,7 @@ static const Rule rules[] = {
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
-/* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-static int       attachbelow = 1;    /* 1 means attach after the currently active window */
-static const int lockfullscreen = 0; /* 1 will force focus on the fullscreen window */
-static const int refreshrate = 120;  /* refresh rate (per second) for client move/resize */
-
+// Layouts variables
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },                          /* layout[0]: tile */
@@ -155,11 +156,14 @@ static const Layout layouts[] = {
 	{ NULL,       NULL },
 };
 
-/* key definitions for calling commands in dwm */
+// Key definitions for calling commands in dwm
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 #define GTKCMD(cmd) { .v = (const char*[]){ "/usr/bin/gtk-launch", cmd, NULL } }
 
-/* commands */
+// Dwmblocks definition
+#define STATUSBAR "dwmblocks"
+
+/* Command variables */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]  = { TERMINAL, NULL };
@@ -168,48 +172,50 @@ static const char *flameshotcmd[] = { "flameshot", "gui", NULL };
 static const char *themecmd[] = { "switch-theme", NULL };
 static const char *layoutmenu_cmd = "layoutmenu.sh";
 
+// Spawntag pertag
 static const Arg tagexec[] = {
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd },
-	{ .v = termcmd }
+	{ .v = termcmd },  // tag 1: information gathering / identification
+	{ .v = termcmd },  // tag 2: exploration
+	{ .v = termcmd },  // tag 3: post-exploration (C2, artifacts, evidences)
+	{ .v = termcmd },  // tag 4: report writing and review
+	{ .v = termcmd },  // tag 5: coding
+	{ .v = termcmd },  // tag 6: others / miscellaneous
+	{ .v = termcmd },  // tag 7: system administration
+	{ .v = termcmd },  // tag 8: defense stuffs
+	{ .v = termcmd }   // tag 9: web browsing
 };
 
+// Keychord variables for keybindings
 static const Keychord *keychords[] = {
-	/* modifier     key                                                            function            argument */
+	// modifier     key                                                            function            argument
 
-  /* quick spawn keybindings */
+  // Quick spawn keybindings
   &((Keychord){1, {{MODKEY, XK_Return}},                                         spawn,              {.v = termcmd } }),
   &((Keychord){1, {{MODKEY|ShiftMask, XK_Return}},                               spawn,              {.v = dmenucmd } }),
   &((Keychord){1, {{Mod1Mask, XK_Return}},                                       spawn,              {.v = tabtermcmd } }),
   &((Keychord){1, {{0, XK_Print}},                                               spawn,              {.v = flameshotcmd } }),
   &((Keychord){1, {{MODKEY, XK_t}},                                              spawn,              {.v = themecmd } }),
 
-  /* dwm control keybindings */
+  // DWM control keybindings
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_BackSpace}},                           killclient,         {0} }),
-  &((Keychord){2, {{MODKEY, XK_c}, {ShiftMask, XK_BackSpace}},                   killclient,         {.ui = 1 } }), /* kill all unselected windows */
-  &((Keychord){2, {{MODKEY, XK_c}, {ControlMask|ShiftMask, XK_BackSpace}},       killclient,         {.ui = 2 } }), /* kill all windows */
-  &((Keychord){2, {{MODKEY, XK_c}, {0, XK_q}},                                   quit,               {0} }),        /* quit dwm */
-  &((Keychord){2, {{MODKEY, XK_c}, {ShiftMask, XK_q}},                           quit,               {1} }),        /* restart dwm */
+  &((Keychord){2, {{MODKEY, XK_c}, {ShiftMask, XK_BackSpace}},                   killclient,         {.ui = 1 } }), // kill all unselected windows
+  &((Keychord){2, {{MODKEY, XK_c}, {ControlMask|ShiftMask, XK_BackSpace}},       killclient,         {.ui = 2 } }), // kill all windows
+  &((Keychord){2, {{MODKEY, XK_c}, {0, XK_q}},                                   quit,               {0} }),        // quit dwm
+  &((Keychord){2, {{MODKEY, XK_c}, {ShiftMask, XK_q}},                           quit,               {1} }),        // restart dwm
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_b}},                                   togglebar,          {0} }),
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_s}},                                   togglesticky,       {0} }),
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_a}},                                   toggleAttachBelow,  {0} }),
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_f}},                                   togglefullscreen,   {0} }),
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_F5}},                                  xrdb,               {.v = NULL } }),
 
-  /* multi-monitor control keybindings */
+  // Multi-monitor control keybindings
   &((Keychord){2, {{MODKEY, XK_m}, {0, XK_f}},                                   focusmon,           {.i = +1 } }),
   &((Keychord){2, {{MODKEY, XK_m}, {ShiftMask, XK_f}},                           focusmon,           {.i = -1 } }),
   &((Keychord){2, {{MODKEY, XK_m}, {0, XK_t}},                                   tagmon,             {.i = +1 } }),
   &((Keychord){2, {{MODKEY, XK_m}, {ShiftMask, XK_t}},                           tagmon,             {.i = -1 } }),
   &((Keychord){2, {{MODKEY, XK_m}, {XK_s}},                                      swapmon,            {0} }),
 
-  /* stack and gaps control keybindings */
+  // Stack and gaps control keybindings
   STACKKEYS(MODKEY,                                                              focus)
   STACKKEYS(MODKEY|ShiftMask,                                                    push)
   &((Keychord){1, {{MODKEY, XK_i}},                                              incnmaster,         {.i = +1 } }),
@@ -234,29 +240,29 @@ static const Keychord *keychords[] = {
   &((Keychord){2, {{MODKEY, XK_s}, {0, XK_g}},                                   togglegaps,         {0} }),
   &((Keychord){2, {{MODKEY, XK_s}, {0, XK_d}},                                   defaultgaps,        {0} }),
 
-  /* layouts keybinds */
-  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_t}},                                   setlayout,          {.v = &layouts[0] } }),      /* layout[0]: tile */
-  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_f}},                                   setlayout,          {.v = &layouts[1] } }),      /* layout[1]: no layout function = floating behavior */
-  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_m}},                                   setlayout,          {.v = &layouts[2] } }),      /* layout[2]: monocle */
-  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_b}},                                   setlayout,          {.v = &layouts[3] } }),      /* layout[3]: bottom stack */
-  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_b}},                                   setlayout,          {.v = &layouts[4] } }),      /* layout[4]: bottom stack horizontal */
-  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_s}},                                   setlayout,          {.v = &layouts[5] } }),      /* layout[5]: spiral */
-  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_d}},                                   setlayout,          {.v = &layouts[6] } }),      /* layout[6]: dwindle */
-  &((Keychord){2, {{MODKEY, XK_l}, {ShiftMask, XK_d}},                           setlayout,          {.v = &layouts[7] } }),      /* layout[7]: deck */
-  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_g}},                                   setlayout,          {.v = &layouts[8] } }),      /* layout[8]: grid */
-  &((Keychord){2, {{MODKEY, XK_l}, {ShiftMask, XK_g}},                           setlayout,          {.v = &layouts[9] } }),      /* layout[9]: n + 1 row grid */
-  &((Keychord){2, {{MODKEY, XK_l}, {ControlMask, XK_g}},                         setlayout,          {.v = &layouts[10] } }),     /* layout[10]: gapless grid */
-  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_h}},                                   setlayout,          {.v = &layouts[11] } }),     /* layout[11]: horizontal grid */
-  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_c}},                                   setlayout,          {.v = &layouts[12] } }),     /* layout[12]: centered master */
-  &((Keychord){2, {{MODKEY, XK_l}, {ShiftMask, XK_c}},                           setlayout,          {.v = &layouts[13] } }),     /* layout[13]: centered floating master */
-  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_space}},                               setlayout,          {0} }),                      /* back to tile layout */
+  // Layouts keybinds
+  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_t}},                                   setlayout,          {.v = &layouts[0] } }),      // layout[0]: tile
+  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_f}},                                   setlayout,          {.v = &layouts[1] } }),      // layout[1]: no layout function = floating behavior
+  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_m}},                                   setlayout,          {.v = &layouts[2] } }),      // layout[2]: monocle
+  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_b}},                                   setlayout,          {.v = &layouts[3] } }),      // layout[3]: bottom stack
+  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_b}},                                   setlayout,          {.v = &layouts[4] } }),      // layout[4]: bottom stack horizontal
+  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_s}},                                   setlayout,          {.v = &layouts[5] } }),      // layout[5]: spiral
+  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_d}},                                   setlayout,          {.v = &layouts[6] } }),      // layout[6]: dwindle
+  &((Keychord){2, {{MODKEY, XK_l}, {ShiftMask, XK_d}},                           setlayout,          {.v = &layouts[7] } }),      // layout[7]: deck
+  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_g}},                                   setlayout,          {.v = &layouts[8] } }),      // layout[8]: grid
+  &((Keychord){2, {{MODKEY, XK_l}, {ShiftMask, XK_g}},                           setlayout,          {.v = &layouts[9] } }),      // layout[9]: n + 1 row grid
+  &((Keychord){2, {{MODKEY, XK_l}, {ControlMask, XK_g}},                         setlayout,          {.v = &layouts[10] } }),     // layout[10]: gapless grid
+  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_h}},                                   setlayout,          {.v = &layouts[11] } }),     // layout[11]: horizontal grid
+  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_c}},                                   setlayout,          {.v = &layouts[12] } }),     // layout[12]: centered master
+  &((Keychord){2, {{MODKEY, XK_l}, {ShiftMask, XK_c}},                           setlayout,          {.v = &layouts[13] } }),     // layout[13]: centered floating master
+  &((Keychord){2, {{MODKEY, XK_l}, {0, XK_space}},                               setlayout,          {0} }),                      // back to tile layout
   &((Keychord){2, {{MODKEY, XK_l}, {0, XK_period}},                              cyclelayout,        {.i = +1 } }),
   &((Keychord){2, {{MODKEY, XK_l}, {0, XK_comma}},                               cyclelayout,        {.i = -1 } }),
   &((Keychord){2, {{MODKEY, XK_l}, {0, XK_space}},                               togglefloating,     {0} }),
   &((Keychord){2, {{MODKEY, XK_l}, {ShiftMask, XK_m}},                           layoutmenu,         {0} }),
 
 
-  /* X11 Keybindings */
+  // X11 keybindings
   &((Keychord){1, {{0, XF86XK_AudioMute}},                                       spawn,              SHCMD("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle; kill -44 $(pidof dwmblocks)") }),
   &((Keychord){1, {{0, XF86XK_AudioRaiseVolume}},                                spawn,              SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0%- && wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+; kill -44 $(pidof dwmblocks)") }),
   &((Keychord){1, {{0, XF86XK_AudioLowerVolume}},                                spawn,              SHCMD("wpctl set-volume @DEFAULT_AUDIO_SINK@ 0%+ && wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-; kill -44 $(pidof dwmblocks)") }),
@@ -272,12 +278,12 @@ static const Keychord *keychords[] = {
   &((Keychord){1, {{0, XF86XK_MonBrightnessUp}},                                 spawn,              {.v = (const char*[]){ "brightnessctl", "set", "+10%", NULL } } }),
   &((Keychord){1, {{0, XF86XK_MonBrightnessDown}},                               spawn,              {.v = (const char*[]){ "brightnessctl", "set", "10%-", NULL } } }),
 
-  /* tags control keybindings */
+  // Tags control keybindings
   &((Keychord){1, {{MODKEY, XK_Tab}},                                            view,               {0} }),
   &((Keychord){1, {{MODKEY, XK_0}},                                              view,               {.ui = ~0 } }),
   &((Keychord){1, {{MODKEY|ShiftMask, XK_0}},                                    tag,                {.ui = ~0 } }),
 
-  /* tags keybindings */
+  // Tags keybindings
 	TAGKEYS(XK_1,                                                                  0)
 	TAGKEYS(XK_2,                                                                  1)
 	TAGKEYS(XK_3,                                                                  2)
@@ -289,22 +295,22 @@ static const Keychord *keychords[] = {
 	TAGKEYS(XK_9,                                                                  8)
 };
 
-/* click and button definitions */
-/* click can be
+// Click and button definitions
+/* 1) click can be:
    ClkTagBar = tags areas,
    ClkLtSymbol = symbol layout area (from the left of the bar), 
    ClkStatusText = text status area (from the right of the bar), 
    ClkWinTitle = (active window title in the bar), 
    ClkClientWin = client window itself, or
    ClkRootWin = window root. */
-/* button can be
+/* 2) button can be:
    Button1 = left click,
    Button2 = middle click,
    Button3 = right click,
    Button4 = Scroll up,
    Button5 = Scroll down. */
 static const Button buttons[] = {
-	/* click                event mask      button          function        argument */
+	// click                event mask      button          function        argument
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
@@ -315,6 +321,9 @@ static const Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button5,        cyclelayout,    {.i = -1 } },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+	{ ClkStatusText,        0,              Button1,        sigstatusbar,   {.i = 1} },
+	{ ClkStatusText,        0,              Button2,        sigstatusbar,   {.i = 2} },
+	{ ClkStatusText,        0,              Button3,        sigstatusbar,   {.i = 3} },
 	{ ClkTagBar,            0,              Button2,        spawntag,       {0} },
 	{ ClkTagBar,            0,              Button1,        view,           {0} },
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
