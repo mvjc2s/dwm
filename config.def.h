@@ -179,17 +179,32 @@ static const Layout layouts[] = {
 // Dwmblocks definition
 #define STATUSBAR "dwmblocks"
 
-// Command variables
+// Dmenu, browser and terminal command variables
 static char dmenumon[2]                 = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[]           = { SYSMENU, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]            = { TERM, NULL };
 static const char *tabtermcmd[]         = { TABTERM, "-r", "2", TERM, "-w", "''", NULL };
 static const char *browsercmd[]         = { BROWSER, NULL };
-static const char *mutecmd[]            = { SNDCTL, "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle", ";", "kill", "-44", "$(pidof dwmblocks)", NULL};
-static const char *raisevolcmd[]        = { SNDCTL, "set-volume", "@default_audio_sink@", "0%-", "&&", "wpctl", "set-volume", "@default_audio_sink@", \
-                                            "3%+", ";", "kill", "-44", "$(pidof dwmblocks)", NULL};
-static const char *lowervolcmd[]        = { SNDCTL, "set-volume", "@DEFAULT_AUDIO_SINK@", "0%+", "&&", "wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", \
-                                            "3%-", ";", "kill", "-44", "$(pidof dwmblocks)", NULL};
+
+// Volume and microphone control command variables
+static const char *mutecmd[]            = {
+  "/bin/sh", "-c",
+  SNDCTL " set-mute @DEFAULT_AUDIO_SINK@ toggle ; kill -44 $(pidof dwmblocks)",
+  NULL
+};
+static const char *raisevolcmd[]        = {
+  "/bin/sh", "-c",
+  SNDCTL " set-volume @DEFAULT_AUDIO_SINK@ 0%- && wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%+ ; kill -44 $(pidof dwmblocks)",
+  NULL
+};
+static const char *lowervolcmd[]        = {
+  "/bin/sh", "-c",
+  SNDCTL " set-volume @DEFAULT_AUDIO_SINK@ 0%+ && wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%- ; kill -44 $(pidof dwmblocks)",
+  NULL
+};
+static const char *micmutecmd[]         = { PA, "set-source-mute", "@DEFAULT_SOURCE@", "toggle", NULL };
+
+// Music player and media control command variables
 static const char *mpcnextcmd[]         = { MPCTL, "next", NULL };
 static const char *mpcprevcmd[]         = { MPCTL, "prev", NULL };
 static const char *mpcplaycmd[]         = { MPCTL, "play", NULL };
@@ -198,7 +213,8 @@ static const char *mpcstopcmd[]         = { MPCTL, "stop", NULL };
 static const char *mpcfwdcmd[]          = { MPCTL, "seek", "+10", NULL };
 static const char *mpcrwdcmd[]          = { MPCTL, "seek", "-10", NULL };
 static const char *sndmediacmd[]        = { TERM, "-e", SNDM, NULL };
-static const char *micmutecmd[]         = { PA, "set-source-mute", "@DEFAULT_SOURCE@", "toggle", NULL };
+
+// Brightness control, printscreen and layoutmenu command variables
 static const char *brightnessupcmd[]    = { BCTL, "set", "+10%", NULL};
 static const char *brightnessdowncmd[]  = { BCTL, "set", "10%-", NULL};
 static const char *flameshotcmd[]       = { PRTSCR, "gui", NULL };
@@ -309,7 +325,7 @@ static const Keychord *keychords[] = {
   &((Keychord){1, {{0, XF86XK_AudioMedia}},                                      spawn,              {.v = sndmediacmd } }),          // open media client
   &((Keychord){1, {{0, XF86XK_AudioMicMute}},                                    spawn,              {.v = micmutecmd } }),           // mute microphone command
   &((Keychord){1, {{0, XF86XK_MonBrightnessUp}},                                 spawn,              {.v = brightnessupcmd } }),      // brightness up command
-  &((Keychord){1, {{0, XF86XK_MonBrightnessDown}},                               spawn,              {.v = brightnessdowncmd } }),  // brightness down command
+  &((Keychord){1, {{0, XF86XK_MonBrightnessDown}},                               spawn,              {.v = brightnessdowncmd } }),    // brightness down command
 
   // Tags control keybindings
   &((Keychord){1, {{MODKEY, XK_Tab}},                                            view,               {0} }),                          // view across current and previous tag
