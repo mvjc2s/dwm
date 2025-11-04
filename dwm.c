@@ -122,6 +122,7 @@ struct Client {
 	int basew, baseh, incw, inch, maxw, maxh, minw, minh, hintsvalid;
 	int bw, oldbw;
 	unsigned int tags;
+	unsigned int switchtotag;
 	int isfixed, isfloating, isurgent, neverfocus, oldstate, isfullscreen, issticky, isterminal, noswallow;
 	unsigned int icw, ich; Picture icon;
 	pid_t pid;
@@ -182,6 +183,7 @@ typedef struct {
 	const char *instance;
 	const char *title;
 	unsigned int tags;
+	unsigned int switchtotag;
 	int isfloating;
 	int isterminal;
 	int noswallow;
@@ -403,6 +405,11 @@ applyrules(Client *c)
 			for (m = mons; m && m->num != r->monitor; m = m->next);
 			if (m)
 				c->mon = m;
+			if (r->switchtotag) {
+				Arg a = { .ui = r->tags };
+				c->switchtotag = selmon->tagset[selmon->seltags];
+				view(&a);
+			}
 		}
 	}
 	if (ch.res_class)
@@ -2634,26 +2641,30 @@ unmanage(Client *c, int destroyed)
 {
 	Monitor *m = c->mon;
 	XWindowChanges wc;
-	int fullscreen = (selmon->sel == c && selmon->sel->isfullscreen)?1:0;
+	int fullscreen = (selmon->sel == c && selmon->sel->isfullscreen)?1:0; // save fullscreen state before free()
+  unsigned int switchtotag = c->switchtotag; // save switchtotag state before free() 
 
-	if (c->swallowing) {
+  // Case 1: client is swallowing another (swallow active)
+	if (c->swallowing) { // c is father (swallower) | handle swallowing first
 		unswallow(c);
-		return;
+    return;
 	}
 
+  // Case 2: client is swallowed by another
 	Client *s = swallowingclient(c->win);
-	if (s) {
+	if (s) { // another client is being swallowed, it's reversed
 		free(s->swallowing);
-		s->swallowing = NULL;
-		arrange(m);
-		focus(NULL);
+    s->swallowing = NULL;
+    arrange(m);
+    focus(NULL);
 		return;
 	}
 
-	detach(c);
-	detachstack(c);
+  // Unmanage's normal case
+	detach(c); // remove c from the monitor's client list
+	detachstack(c); // remove c from the stacking order
 	freeicon(c);
-	if (!destroyed) {
+	if (!destroyed) { // restore X11 properties if not destroyed
 		wc.border_width = c->oldbw;
 		XGrabServer(dpy); /* avoid race conditions */
 		XSetErrorHandler(xerrordummy);
@@ -2665,16 +2676,25 @@ unmanage(Client *c, int destroyed)
 		XSetErrorHandler(xerror);
 		XUngrabServer(dpy);
 	}
-	free(c);
 
+	free(c); // free memory
+
+  // If fullscreen, deactivate fullscreen before rearrange
 	if(fullscreen){
 		togglefullscreen();
 	}
 
-	if (!s) {
+  // Rearrange and switch to a specific tag if client is not swallowed
+	if (!s) { // recalcs layout that c is gone
 		arrange(m);
 		focus(NULL);
 		updateclientlist();
+
+    // switchtotag patch: switch pre-configured tag automatically (rules)
+    if (switchtotag) {
+      Arg a = { .ui = switchtotag };
+      view(&a);
+    }
 	}
 }
 

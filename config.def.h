@@ -3,19 +3,39 @@
 // XF86 Key symbols definition for X11 keybindings
 #include<X11/XF86keysym.h>
 
-// Program constants
-#define TERM         "st"
-#define TERMCLASS    "st-256color"
-#define TABTERM      "tabbed"
-#define BROWSER      "qutebrowser"
-#define PRTSCR       "flameshot"
-#define LAYOUTMENU   "layoutmenu.sh"
-#define SYSMENU      "dmenu_run"
-#define SNDCTL       "wpctl"
-#define MPCTL        "mpc"
-#define SNDM         "ncmpcpp"
-#define PA           "pactl"
-#define BCTL         "brightnessctl"
+/* Program standard and class constants */
+// Suckless programs
+#define TERM         "st"                       // Terminal
+#define TERMCLASS    "st-256color"              // Terminal class
+#define FTERMI       "floatterm"                // Float terminal instance
+#define TABTERM      "tabbed"                   // Tabbing
+#define LSCR         "slock"                    // Lock screen
+#define SYSMENU      "dmenu_run"                // System menu
+#define LAYOUTMENU   "layoutmenu.sh"            // Layout menu
+// Common usable programs
+#define BROWSER      "qutebrowser"              // Browser
+#define PRTSCR       "flameshot"                // Screenshot
+#define EAPP         "nvim"                     // Text editor
+#define EAPPI        "editor"                   // Text editor instance
+#define CAPP         "lazyvim"                  // Coding
+#define CAPPI        "coding"                   // Coding instance
+#define NAPP         "logseq"                   // Notes
+#define NAPPCLASS    "Logseq"                   // Notes class
+#define PAPP         "gimp"                     // Photoshop
+#define PAPPCLASS    "Gimp"                     // Photoshop class
+// Network programs
+#define WS           "wireshark"                // Network analysis
+#define WSCLASS      "Wireshark"                // Network analysis class
+// Sound and media control programs
+#define SNDCTL       "wpctl"                    // Sound control
+#define MPCTL        "mpc"                      // Media player command control
+#define MPM          "ncmpcpp"                  // Media player manager
+#define MPMI         "music"                    // Media player instance
+#define PA           "pactl"                    // Pulseaudio control
+// Brightness and system control programs
+#define BCTL         "brightnessctl"            // Brightness control
+#define PCTL         "htop"                     // Process control
+#define PCTLI        "process"                  // Process control instance
 
 // MODKEY, TAGKEYS and STACKKEYS definitions
 #define MODKEY Mod4Mask
@@ -34,32 +54,32 @@
   &((Keychord){1, {{MOD, XK_x}},     ACTION##stack, {.i = -1 } }),
 
 // Appearance variables
-static const unsigned int borderpx      = 1;        /* border pixel of windows */
-static const unsigned int snap          = 32;       /* snap pixel */
-static const unsigned int gappih        = 20;       /* horiz inner gap between windows */
-static const unsigned int gappiv        = 10;       /* vert inner gap between windows */
-static const unsigned int gappoh        = 10;       /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov        = 30;       /* vert outer gap between windows and screen edge */
-static const unsigned int ulinepad      = 5;        /* horizontal padding between the underline and tag */
-static const unsigned int ulinestroke   = 2;        /* thickness / height of the underline */
-static const unsigned int ulinevoffset  = 0;        /* how far above the bottom of the bar the line should appear */
-static const int ulineall               = 0;        /* 1 to show underline on all tags, 0 for just the active ones */
-static const int swallowfloating        = 0;        /* 1 means swallow floating windows by default */
-static const int nmaster                = 1;        /* number of clients in master area */
-static const int resizehints            = 1;        /* 1 means respect size hints in tiled resizals */
-static const int showbar                = 1;        /* 0 means no bar */
-static const int topbar                 = 1;        /* 0 means bottom bar */
-static const int sidepad                = 10;       /* horizontal padding of bar */
-static const int vertpad                = 10;       /* vertical padding of bar */
-static const int horizpadbar            = 1;        /* horizontal padding for statusbar */
-static const int vertpadbar             = 0;        /* vertical padding for statusbar */
-static const int lockfullscreen         = 0;        /* 1 will force focus on the fullscreen window */
-static const int refreshrate            = 120;      /* refresh rate (per second) for client move/resize */
-static       int attachbelow            = 1;        /* 1 means attach after the currently active window */
-static       int smartgaps              = 0;        /* 1 means no outer gap when there is only one window */
-static const float mfact                = 0.55;     /* factor of master area size [0.05..0.95] */
-static const XPoint stickyicon[]        = { {0,0}, {4,0}, {4,8}, {2,6}, {0,8}, {0,0} }; /* represents the icon as an array of vertices */
-static const XPoint stickyiconbb        = {4,8};	/* defines the bottom right corner of the polygon's bounding box (speeds up scaling) */
+static const unsigned int borderpx      = 1;        // border pixel of windows
+static const unsigned int snap          = 32;       // snap pixel
+static const unsigned int gappih        = 20;       // horiz inner gap between windows
+static const unsigned int gappiv        = 10;       // vert inner gap between windows
+static const unsigned int gappoh        = 10;       // horiz outer gap between windows and screen edge
+static const unsigned int gappov        = 30;       // vert outer gap between windows and screen edge
+static const unsigned int ulinepad      = 5;        // horizontal padding between the underline and tag
+static const unsigned int ulinestroke   = 2;        // thickness / height of the underline
+static const unsigned int ulinevoffset  = 0;        // how far above the bottom of the bar the line should appear
+static const int ulineall               = 0;        // 1 to show underline on all tags, 0 for just the active ones
+static const int swallowfloating        = 0;        // 1 means swallow floating windows by default
+static const int nmaster                = 1;        // number of clients in master area
+static const int resizehints            = 1;        // 1 means respect size hints in tiled resizals
+static const int showbar                = 1;        // 0 means no bar
+static const int topbar                 = 1;        // 0 means bottom bar
+static const int sidepad                = 10;       // horizontal padding of bar
+static const int vertpad                = 10;       // vertical padding of bar
+static const int horizpadbar            = 1;        // horizontal padding for statusbar
+static const int vertpadbar             = 0;        // vertical padding for statusbar
+static const int lockfullscreen         = 0;        // 1 will force focus on the fullscreen window
+static const int refreshrate            = 120;      // refresh rate (per second) for client move/resize
+static       int attachbelow            = 1;        // 1 means attach after the currently active window
+static       int smartgaps              = 0;        // 1 means no outer gap when there is only one window
+static const float mfact                = 0.55;     // factor of master area size [0.05..0.95]
+static const XPoint stickyicon[]        = { {0,0}, {4,0}, {4,8}, {2,6}, {0,8}, {0,0} }; // represents the icon as an array of vertices
+static const XPoint stickyiconbb        = {4,8};    // defines the bottom right corner of the polygon's bounding box (speeds up scaling)
 
 // Colors variables
 static char normbgcolor[]     = "#222222";
@@ -74,6 +94,7 @@ static char *colors[][3] = {
   [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
 }; 
 
+// Xrdb colors
 static char termcol0[]   = "#000000"; /* black   */
 static char termcol1[]   = "#ff0000"; /* red     */
 static char termcol2[]   = "#33ff00"; /* green   */
@@ -131,7 +152,7 @@ static const char *tags[] = {
   "1:🔍", /* information gathering / identification */
   "2:🎯", /* exploration */
   "3:💻", /* post-exploration (C2, artifacts, evidences) */
-  "4:📝", /* report writing and review */
+  "4:📝", /* notations, report writing and review */
   "5:👨‍💻", /* coding */
   "6:📁", /* others / miscellaneous */
   "7:🛠️", /* system administration */
@@ -141,15 +162,65 @@ static const char *tags[] = {
 
 // Window Manager Rules
 static const Rule rules[] = {
-  /* xprop(1):
-  *	WM_CLASS(STRING) = instance, class
-  *	WM_NAME(STRING) = title
+  /* Useful table
+    * Program type         isterminal    noswallow     Why?
+    * Normal terminal      1             0             CAN swallow GUI's
+    * Specific terminal    1             0             CAN swallow if needed
+    * Browser              0             -1            CAN swallow popups/dialogs, etc
+    * Normal GUI           0             0             CAN BE swallowed
+    * Debug tools          0             1             NEVER swallow
+    * Complex editors      0             1             NEVER swallow, some temporary windows
+    * Players/visualizers  0             0             CAN BE swallowed
   */
-  /* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-  { "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
-  { BROWSER,   NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
-  { TERMCLASS, NULL,     NULL,           0,         0,          1,           0,        -1 },
-  { NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
+
+  /* xprop(1):
+    *  WM_CLASS(STRING) = instance, class
+    *  WM_NAME(STRING) = title
+    *  tags mask = bit mask
+    *  noswallow = {
+    *            0 → CAN BE swallowed by a terminal (normal behavior)
+    *            1 → NEVER will be swallowed (useful for xev, debug programs like gdb, etc)
+    *            -1 → CAN BE swallowed AND also CAN swallow others clients (useful for browsers)
+    *            }
+    *  monitor   = {
+    *            -1 (any monitor selected),
+    *            0 (main monitor),
+    *            1 (secondary monitor),
+    *            2 (tertiary monitor)
+    *            ...
+    *            }
+  */
+
+  /* class       instance      title             tags mask    switchtotag    isfloating    isterminal    noswallow    monitor */
+  // tag 1
+  // tag 2
+  // tag 3
+
+  // tag 4
+  { NAPPCLASS,   NULL,         NULL,             1 << 3,      1,             0,            0,             0,          -1 },
+
+  // tag 5
+  { TERMCLASS,   CAPPI,        NULL,             1 << 4,      1,             0,            1,             0,          -1 },
+
+  // tag 6
+  { PAPPCLASS,   NULL,         NULL,             1 << 5,      1,             0,            0,             1,          -1 },
+  { TERMCLASS,   MPMI,         NULL,             1 << 5,      1,             0,            1,             0,          -1 },
+
+  // tag 7
+  { WSCLASS,     NULL,         NULL,             1 << 6,      1,             0,            0,             0,          -1 },
+  { TERMCLASS,   PCTLI,        NULL,             1 << 6,      1,             0,            1,             0,          -1 },
+
+  // tag 8
+
+  // tag 9
+  { BROWSER,     NULL,         NULL,             1 << 8,      1,             0,            0,            -1,          -1 },
+
+  // any tag
+  { TERMCLASS,   NULL,         NULL,             0,           0,             0,            1,             0,          -1 },
+  { TERMCLASS,   FTERMI,       NULL,             0,           0,             1,            1,             0,          -1 },
+
+  // xev
+  { NULL,        NULL,         "Event Tester",   0,           0,             0,            0,             1,          -1 },
 };
 
 // Layouts variables
@@ -172,19 +243,32 @@ static const Layout layouts[] = {
 	{ NULL,       NULL },
 };
 
+// Dwmblocks definition
+#define STATUSBAR "dwmblocks"
+
 // Key definitions for calling commands/scripts in dwm
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 #define GTKCMD(cmd) { .v = (const char*[]){ "/usr/bin/gtk-launch", cmd, NULL } }
 
-// Dwmblocks definition
-#define STATUSBAR "dwmblocks"
-
-// Dmenu, browser and terminal command variables
+// Suckless command variables
 static char dmenumon[2]                 = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[]           = { SYSMENU, "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]            = { TERM, NULL };
+static const char *floattermcmd[]       = { TERM, "-n", FTERMI, "-g", "120x34", NULL };
 static const char *tabtermcmd[]         = { TABTERM, "-r", "2", TERM, "-w", "''", NULL };
+static const char *lockscrcmd[]         = { LSCR, NULL };
+static const char *layoutmenu_cmd       = LAYOUTMENU;
+
+// Common usable command variables
 static const char *browsercmd[]         = { BROWSER, NULL };
+static const char *editorappcmd[]       = { TERM, "-n", EAPPI, "-e", EAPP, NULL };
+static const char *codeappcmd[]         = { TERM, "-n", CAPPI, "-e", "sh", "-c", CAPP, NULL };
+static const char *noteappcmd[]         = { NAPP, NULL };
+static const char *flameshotcmd[]       = { PRTSCR, "gui", NULL };
+static const char *photoshopcmd[]       = { PAPP, NULL };
+
+// Network command variables
+static const char *wiresharkcmd[]       = { WS, NULL };
 
 // Volume and microphone control command variables
 static const char *mutecmd[]            = {
@@ -204,7 +288,7 @@ static const char *lowervolcmd[]        = {
 };
 static const char *micmutecmd[]         = { PA, "set-source-mute", "@DEFAULT_SOURCE@", "toggle", NULL };
 
-// Music player and media control command variables
+// Media player and control command variables
 static const char *mpcnextcmd[]         = { MPCTL, "next", NULL };
 static const char *mpcprevcmd[]         = { MPCTL, "prev", NULL };
 static const char *mpcplaycmd[]         = { MPCTL, "play", NULL };
@@ -212,13 +296,12 @@ static const char *mpcpausecmd[]        = { MPCTL, "pause", NULL };
 static const char *mpcstopcmd[]         = { MPCTL, "stop", NULL };
 static const char *mpcfwdcmd[]          = { MPCTL, "seek", "+10", NULL };
 static const char *mpcrwdcmd[]          = { MPCTL, "seek", "-10", NULL };
-static const char *sndmediacmd[]        = { TERM, "-e", SNDM, NULL };
+static const char *sndmediacmd[]        = { TERM, "-n", MPMI, "-e", MPM, NULL };
 
-// Brightness control, printscreen and layoutmenu command variables
-static const char *brightnessupcmd[]    = { BCTL, "set", "+10%", NULL};
-static const char *brightnessdowncmd[]  = { BCTL, "set", "10%-", NULL};
-static const char *flameshotcmd[]       = { PRTSCR, "gui", NULL };
-static const char *layoutmenu_cmd       = LAYOUTMENU;
+// Brightness and system control command variables
+static const char *brightnessupcmd[]    = { BCTL, "set", "+10%", NULL };
+static const char *brightnessdowncmd[]  = { BCTL, "set", "10%-", NULL };
+static const char *processctlcmd[]      = { TERM, "-n", PCTLI, "-e", PCTL, NULL };
 
 // Spawntag pertag
 static const Arg tagexec[] = {
@@ -242,6 +325,14 @@ static const Keychord *keychords[] = {
   &((Keychord){1, {{Mod1Mask, XK_Return}},                                       spawn,              {.v = tabtermcmd } }),           // tabbed terminal command
   &((Keychord){1, {{0, XK_Print}},                                               spawn,              {.v = flameshotcmd } }),         // flameshot command
   &((Keychord){1, {{MODKEY, XK_b}},                                              spawn,              {.v = browsercmd } }),           // browser command
+  &((Keychord){1, {{MODKEY, XK_n}},                                              spawn,              {.v = noteappcmd } }),           // note app command
+  &((Keychord){2, {{MODKEY, XK_p}, {0, XK_c}},                                   spawn,              {.v = codeappcmd } }),           // coding command
+  &((Keychord){2, {{MODKEY, XK_p}, {0, XK_e}},                                   spawn,              {.v = editorappcmd } }),         // coding command                                                                                                                                     // editor command
+  &((Keychord){2, {{MODKEY, XK_p}, {0, XK_f}},                                   spawn,              {.v = floattermcmd } }),         // float terminal command
+  &((Keychord){2, {{MODKEY, XK_p}, {0, XK_g}},                                   spawn,              {.v = photoshopcmd } }),         // photoshop command
+  &((Keychord){2, {{MODKEY, XK_p}, {0, XK_m}},                                   spawn,              {.v = sndmediacmd } }),          // media|music client
+  &((Keychord){2, {{MODKEY, XK_p}, {0, XK_s}},                                   spawn,              {.v = processctlcmd } }),        // process control command
+  &((Keychord){2, {{MODKEY, XK_p}, {0, XK_w}},                                   spawn,              {.v = wiresharkcmd } }),         // wireshark command
   &((Keychord){2, {{MODKEY, XK_s}, {0, XK_t}},                                   spawn,              SHCMD("switch-theme") }),        // switch-theme script
 
   // DWM control keybindings
@@ -249,13 +340,14 @@ static const Keychord *keychords[] = {
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_r}},                                   quit,               {1} }),                          // restart dwm
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_b}},                                   togglebar,          {0} }),                          // toggle dwm bar
   &((Keychord){2, {{MODKEY, XK_c}, {0, XK_F5}},                                  xrdb,               {.v = NULL } }),                 // reload xrdb
+  &((Keychord){2, {{MODKEY, XK_c}, {0, XK_l}},                                   spawn,              {.v = lockscrcmd } }),           // lock screen command
 
   // Multi-monitor control keybindings
   &((Keychord){2, {{MODKEY, XK_f}, {0, XK_j}},                                   focusmon,           {.i = +1 } }),                   // focus next monitor
   &((Keychord){2, {{MODKEY, XK_f}, {0, XK_k}},                                   focusmon,           {.i = -1 } }),                   // focus previous monitor
-  &((Keychord){2, {{MODKEY, XK_m}, {0, XK_j}},                                   tagmon,             {.i = +1 } }),                   // tag select window to the next monitor
-  &((Keychord){2, {{MODKEY, XK_m}, {0, XK_k}},                                   tagmon,             {.i = -1 } }),                   // tag select window to the previous monitor
-  &((Keychord){2, {{MODKEY, XK_m}, {0, XK_s}},                                   swapmon,            {0} }),                          // swap windows between monitors
+  &((Keychord){2, {{MODKEY, XK_t}, {0, XK_j}},                                   tagmon,             {.i = +1 } }),                   // tag select window to the next monitor
+  &((Keychord){2, {{MODKEY, XK_t}, {0, XK_k}},                                   tagmon,             {.i = -1 } }),                   // tag select window to the previous monitor
+  &((Keychord){2, {{MODKEY, XK_s}, {0, XK_m}},                                   swapmon,            {0} }),                          // swap windows between monitors
 
   // Stack keybindings
   STACKKEYS(MODKEY,                                                              focus)                                               // focus stack function
@@ -322,7 +414,7 @@ static const Keychord *keychords[] = {
   &((Keychord){1, {{0, XF86XK_AudioStop}},                                       spawn,              {.v = mpcstopcmd } }),           // stop media command
   &((Keychord){1, {{0, XF86XK_AudioForward}},                                    spawn,              {.v = mpcfwdcmd } }),            // forward audio command
   &((Keychord){1, {{0, XF86XK_AudioRewind}},                                     spawn,              {.v = mpcrwdcmd } }),            // rewind audio command
-  &((Keychord){1, {{0, XF86XK_AudioMedia}},                                      spawn,              {.v = sndmediacmd } }),          // open media client
+  &((Keychord){1, {{0, XF86XK_AudioMedia}},                                      spawn,              {.v = sndmediacmd } }),          // media|music client
   &((Keychord){1, {{0, XF86XK_AudioMicMute}},                                    spawn,              {.v = micmutecmd } }),           // mute microphone command
   &((Keychord){1, {{0, XF86XK_MonBrightnessUp}},                                 spawn,              {.v = brightnessupcmd } }),      // brightness up command
   &((Keychord){1, {{0, XF86XK_MonBrightnessDown}},                               spawn,              {.v = brightnessdowncmd } }),    // brightness down command
