@@ -3,7 +3,7 @@
 // XF86 Key symbols definition for X11 keybindings
 #include<X11/XF86keysym.h>
 
-/* Program standard and class constants */
+/* Program standard and class constants         */
 // Suckless programs
 #define TERM         "st"                       // Terminal
 #define TERMCLASS    "st-256color"              // Terminal class
@@ -23,6 +23,9 @@
 #define NAPPCLASS    "Logseq"                   // Notes class
 #define PAPP         "gimp"                     // Photoshop
 #define PAPPCLASS    "Gimp"                     // Photoshop class
+#define W10          "qemu-windows_10.sh"       // Windows 10 QEMU script
+#define RVCLASS      "Remote-viewer"            // Remote-viewer instance
+#define VMI          "virtualm"                 // Virtual machine instance
 // Network programs
 #define WS           "wireshark"                // Network analysis
 #define WSCLASS      "Wireshark"                // Network analysis class
@@ -156,7 +159,7 @@ static const char *tags[] = {
   "5:👨‍💻", /* coding */
   "6:📁", /* others / miscellaneous */
   "7:🛠️", /* system administration */
-  "8:🛡️", /* defense stuffs */
+  "8:🛡️", /* defense stuff and virtualization */
   "9:🌐"  /* web browsing */
 };
 
@@ -191,36 +194,38 @@ static const Rule rules[] = {
     *            }
   */
 
-  /* class       instance      title             tags mask    switchtotag    isfloating    isterminal    noswallow    monitor */
+  /* class       instance      title             tags mask    switchtotag    isfloating    iscentered    isterminal    noswallow    monitor */
   // tag 1
   // tag 2
   // tag 3
 
   // tag 4
-  { NAPPCLASS,   NULL,         NULL,             1 << 3,      1,             0,            0,             0,          -1 },
+  { NAPPCLASS,   NULL,         NULL,             1 << 3,      1,             0,            0,            0,            0,           -1 },
 
   // tag 5
-  { TERMCLASS,   CAPPI,        NULL,             1 << 4,      1,             0,            1,             0,          -1 },
+  { TERMCLASS,   CAPPI,        NULL,             1 << 4,      1,             0,            0,            1,            0,           -1 },
 
   // tag 6
-  { PAPPCLASS,   NULL,         NULL,             1 << 5,      1,             0,            0,             1,          -1 },
-  { TERMCLASS,   MPMI,         NULL,             1 << 5,      1,             0,            1,             0,          -1 },
+  { PAPPCLASS,   NULL,         NULL,             1 << 5,      1,             0,            1,            0,            1,           -1 },
+  { TERMCLASS,   MPMI,         NULL,             1 << 5,      1,             0,            0,            1,            0,           -1 },
 
   // tag 7
-  { WSCLASS,     NULL,         NULL,             1 << 6,      1,             0,            0,             0,          -1 },
-  { TERMCLASS,   PCTLI,        NULL,             1 << 6,      1,             0,            1,             0,          -1 },
+  { WSCLASS,     NULL,         NULL,             1 << 6,      1,             0,            0,            0,            0,           -1 },
+  { TERMCLASS,   PCTLI,        NULL,             1 << 6,      1,             0,            0,            1,            0,           -1 },
 
   // tag 8
+  { TERMCLASS,   VMI,          NULL,             1 << 7,      1,             0,            0,            1,            0,           -1 },
+  { RVCLASS,     NULL,         NULL,             1 << 7,      1,             0,            0,            0,            0,           -1 },
 
   // tag 9
-  { BROWSER,     NULL,         NULL,             1 << 8,      1,             0,            0,            -1,          -1 },
+  { BROWSER,     NULL,         NULL,             1 << 8,      1,             0,            0,            0,            -1,          -1 },
 
   // any tag
-  { TERMCLASS,   NULL,         NULL,             0,           0,             0,            1,             0,          -1 },
-  { TERMCLASS,   FTERMI,       NULL,             0,           0,             1,            1,             0,          -1 },
+  { TERMCLASS,   FTERMI,       NULL,             0,           0,             1,            1,            1,            0,           -1 },
+  { TERMCLASS,   NULL,         NULL,             0,           0,             0,            0,            1,            0,           -1 },
 
   // xev
-  { NULL,        NULL,         "Event Tester",   0,           0,             0,            0,             1,          -1 },
+  { NULL,        NULL,         "Event Tester",   0,           0,             0,            0,            0,            1,           -1 },
 };
 
 // Layouts variables
@@ -266,6 +271,7 @@ static const char *codeappcmd[]         = { TERM, "-n", CAPPI, "-e", "sh", "-c",
 static const char *noteappcmd[]         = { NAPP, NULL };
 static const char *flameshotcmd[]       = { PRTSCR, "gui", NULL };
 static const char *photoshopcmd[]       = { PAPP, NULL };
+static const char *virtualmcmd[]        = { TERM, "-n", VMI, "-e", W10, "run", NULL};
 
 // Network command variables
 static const char *wiresharkcmd[]       = { WS, NULL };
@@ -318,7 +324,7 @@ static const Arg tagexec[] = {
 
 // Keychord variables for keybindings
 static const Keychord *keychords[] = {
-	// modifier     key                                                            function            argument
+	/* modifier     key                                                            function            argument                         */
   // Quick spawn keybindings
   &((Keychord){1, {{MODKEY, XK_Return}},                                         spawn,              {.v = termcmd } }),              // terminal command
   &((Keychord){1, {{MODKEY|ShiftMask, XK_Return}},                               spawn,              {.v = dmenucmd } }),             // dmenu command
@@ -333,6 +339,7 @@ static const Keychord *keychords[] = {
   &((Keychord){2, {{MODKEY, XK_p}, {0, XK_m}},                                   spawn,              {.v = sndmediacmd } }),          // media|music client
   &((Keychord){2, {{MODKEY, XK_p}, {0, XK_s}},                                   spawn,              {.v = processctlcmd } }),        // process control command
   &((Keychord){2, {{MODKEY, XK_p}, {0, XK_w}},                                   spawn,              {.v = wiresharkcmd } }),         // wireshark command
+  &((Keychord){2, {{MODKEY, XK_p}, {0, XK_v}},                                   spawn,              {.v = virtualmcmd } }),          // QEMU Windows 10 run command
   &((Keychord){2, {{MODKEY, XK_s}, {0, XK_t}},                                   spawn,              SHCMD("switch-theme") }),        // switch-theme script
 
   // DWM control keybindings
