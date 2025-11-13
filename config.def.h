@@ -26,6 +26,8 @@
 #define W10          "qemu-windows_10.sh"       // Windows 10 QEMU script
 #define RVCLASS      "Remote-viewer"            // Remote-viewer instance
 #define VMI          "virtualm"                 // Virtual machine instance
+#define KD           "kali-docker.sh"           // Kali docker script
+#define KDI          "pentest"                  // Kali docker instance
 // Network programs
 #define WS           "wireshark"                // Network analysis
 #define WSCLASS      "Wireshark"                // Network analysis class
@@ -194,38 +196,48 @@ static const Rule rules[] = {
     *            }
   */
 
-  /* class       instance      title             tags mask    switchtotag    isfloating    iscentered    isterminal    noswallow    monitor */
-  // tag 1
-  // tag 2
-  // tag 3
-
+  /* class       instance      title             tags mask                          switchtotag    isfloating    iscentered    isterminal    noswallow    monitor */
+  /* general instances */
   // tag 4
-  { NAPPCLASS,   NULL,         NULL,             1 << 3,      1,             0,            0,            0,            0,           -1 },
-
-  // tag 5
-  { TERMCLASS,   CAPPI,        NULL,             1 << 4,      1,             0,            0,            1,            0,           -1 },
+  { NAPPCLASS,   NULL,         NULL,             1 << 3,                            1,             0,            0,            0,            0,           -1 },
 
   // tag 6
-  { PAPPCLASS,   NULL,         NULL,             1 << 5,      1,             0,            1,            0,            1,           -1 },
-  { TERMCLASS,   MPMI,         NULL,             1 << 5,      1,             0,            0,            1,            0,           -1 },
+  { PAPPCLASS,   NULL,         NULL,             1 << 5,                            1,             0,            1,            0,            1,           -1 },
 
   // tag 7
-  { WSCLASS,     NULL,         NULL,             1 << 6,      1,             0,            0,            0,            0,           -1 },
-  { TERMCLASS,   PCTLI,        NULL,             1 << 6,      1,             0,            0,            1,            0,           -1 },
+  { WSCLASS,     NULL,         NULL,             1 << 6,                            1,             0,            0,            0,            0,           -1 },
 
   // tag 8
-  { TERMCLASS,   VMI,          NULL,             1 << 7,      1,             0,            0,            1,            0,           -1 },
-  { RVCLASS,     NULL,         NULL,             1 << 7,      1,             0,            0,            0,            0,           -1 },
+  { RVCLASS,     NULL,         NULL,             1 << 7,                            1,             0,            0,            0,            0,           -1 },
 
   // tag 9
-  { BROWSER,     NULL,         NULL,             1 << 8,      1,             0,            0,            0,            -1,          -1 },
+  { BROWSER,     NULL,         NULL,             1 << 8,                            1,             0,            0,            0,            -1,          -1 },
 
   // any tag
-  { TERMCLASS,   FTERMI,       NULL,             0,           0,             1,            1,            1,            0,           -1 },
-  { TERMCLASS,   NULL,         NULL,             0,           0,             0,            0,            1,            0,           -1 },
+  { TERMCLASS,   NULL,         NULL,             0,                                 0,             0,            0,            1,            0,           -1 },
 
   // xev
-  { NULL,        NULL,         "Event Tester",   0,           0,             0,            0,            0,            1,           -1 },
+  { NULL,        NULL,         "Event Tester",   0,                                 0,             0,            0,            0,            1,           -1 },
+
+
+  /* specific instances */
+  // tag 1, 2 and 3
+  { TERMCLASS,   KDI,          NULL,             (1 << 0) | (1 << 1) | (1 << 2),    1,             0,            0,            1,            0,           -1 },
+
+  // tag 5
+  { TERMCLASS,   CAPPI,        NULL,             1 << 4,                            1,             0,            0,            1,            0,           -1 },
+
+  // tag 6
+  { TERMCLASS,   MPMI,         NULL,             1 << 5,                            1,             0,            0,            1,            0,           -1 },
+
+  // tag 7
+  { TERMCLASS,   PCTLI,        NULL,             1 << 6,                            1,             0,            0,            1,            0,           -1 },
+
+  // tag 8
+  { TERMCLASS,   VMI,          NULL,             1 << 7,                            1,             0,            0,            1,            0,           -1 },
+
+  // any tag
+  { TERMCLASS,   FTERMI,       NULL,             0,                                 0,             1,            1,            1,            0,           -1 },
 };
 
 // Layouts variables
@@ -271,10 +283,14 @@ static const char *codeappcmd[]         = { TERM, "-n", CAPPI, "-e", "sh", "-c",
 static const char *noteappcmd[]         = { NAPP, NULL };
 static const char *flameshotcmd[]       = { PRTSCR, "gui", NULL };
 static const char *photoshopcmd[]       = { PAPP, NULL };
-static const char *virtualmcmd[]        = { TERM, "-n", VMI, "-e", W10, "run", NULL};
 
 // Network command variables
 static const char *wiresharkcmd[]       = { WS, NULL };
+
+// Virtualization command variables
+static const char *virtualmcmd[]        = { TERM, "-n", VMI, "-e", W10, "run", NULL};
+static const char *kdockerstartcmd[]    = { "/bin/sh", "-c", "DISPLAY=:0", "kali-docker.sh", "start", NULL };
+static const char *kdockershellcmd[]    = { TERM, "-n", KDI, "-e", KD, "shell", NULL };
 
 // Volume and microphone control command variables
 static const char *mutecmd[]            = {
@@ -337,7 +353,9 @@ static const Keychord *keychords[] = {
   &((Keychord){2, {{MODKEY, XK_p}, {0, XK_f}},                                   spawn,              {.v = floattermcmd } }),         // float terminal command
   &((Keychord){2, {{MODKEY, XK_p}, {0, XK_g}},                                   spawn,              {.v = photoshopcmd } }),         // photoshop command
   &((Keychord){2, {{MODKEY, XK_p}, {0, XK_m}},                                   spawn,              {.v = sndmediacmd } }),          // media|music client
-  &((Keychord){2, {{MODKEY, XK_p}, {0, XK_s}},                                   spawn,              {.v = processctlcmd } }),        // process control command
+  &((Keychord){2, {{MODKEY, XK_p}, {0, XK_h}},                                   spawn,              {.v = processctlcmd } }),        // process control (htop) command
+  &((Keychord){2, {{MODKEY, XK_p}, {0, XK_s}},                                   spawn,              {.v = kdockershellcmd } }),      // kali-docker shell command script
+  &((Keychord){2, {{MODKEY, XK_p}, {ShiftMask, XK_s}},                           spawn,              {.v = kdockerstartcmd } }),      // kali-docker start command script
   &((Keychord){2, {{MODKEY, XK_p}, {0, XK_w}},                                   spawn,              {.v = wiresharkcmd } }),         // wireshark command
   &((Keychord){2, {{MODKEY, XK_p}, {0, XK_v}},                                   spawn,              {.v = virtualmcmd } }),          // QEMU Windows 10 run command
   &((Keychord){2, {{MODKEY, XK_s}, {0, XK_t}},                                   spawn,              SHCMD("switch-theme") }),        // switch-theme script
